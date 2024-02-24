@@ -13,6 +13,7 @@ mitmproxy = "^10.2.2"
 
 [tool.poetry.group.dev.dependencies]
 behave = "^1.2.6"
+requests = "^2.31.0"
 
 [build-system]
 requires = ["poetry-core"]
