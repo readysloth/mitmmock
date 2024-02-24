@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "mitmmock"
+version = "0.1.0"
+description = "Mocking of request-response chains"
+authors = ["Your Name <you@example.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+mitmproxy = "^10.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+behave = "^1.2.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
