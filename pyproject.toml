@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 mitmproxy = "^10.2.2"
+preppy = "^4.2.2"
 
 
 [tool.poetry.group.dev.dependencies]
