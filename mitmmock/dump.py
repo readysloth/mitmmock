@@ -41,8 +41,8 @@ class MitmMockConfigDump:
 
     def done(self):
         with open(ctx.options.mitmmock_dump, 'w') as f:
-            header = r'''{{def(postproc_left, postproc_right)}}
-{{if true == false}}
+            header = r'''{{def(__left__, __right__)}}
+{{if False}}
     This is comment block.
     Requests, for now, displayed here only as context for the user.
 
@@ -59,10 +59,14 @@ class MitmMockConfigDump:
         in the load time
         - imp escapes `import` template, so it would not affect preppy
         in the load time
+
+    Also, current request is exported to this environment as {{Request}}
+    dictionary.
 {{endif}}
 
-{{def runtime(expr)}}{{postproc_left}}{{expr}}{{postproc_right}}{{enddef}}
-{{def imp(module)}}{{postproc_left}}import {{module}}{{postproc_right}}{{enddef}}
+{{def runtime_def(*args)}}{{__left__}}{{__def__}}(*args){{__right__}}{{enddef}}
+{{def runtime(expr)}}{{__left__}}{{expr}}{{__right__}}{{enddef}}
+{{def imp(module)}}{{__left__}}import {{module}}{{__right__}}{{enddef}}
 '''
             f.write(header)
             f.write(json.dumps(self.chain, indent=2))

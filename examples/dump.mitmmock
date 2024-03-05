@@ -1,4 +1,31 @@
-#import user.py
+{{def(__left__, __right__)}}
+{{if False}}
+    This is comment block.
+    Requests, for now, displayed here only as context for the user.
+
+    MitmMock execution is splitted in two parts:
+        - load time -- preprocessing of json
+        - runtime -- processing of json keys/values
+
+    To modify responses in load time, you can use preppy as it stated
+    in preppy's documentation (see https://preppy.readthedocs.io)
+
+    To modify responses in runtime, you should use functions defined
+    below:
+        - runtime escapes expression, so it would not affect preppy
+        in the load time
+        - imp escapes `import` template, so it would not affect preppy
+        in the load time
+
+    Also, current request is exported to this environment as {{Request}}
+    dictionary.
+{{endif}}
+
+{{def runtime_def(args)}}{{__left__}}{{__def__}}({{args}}){{__right__}}{{enddef}}
+{{def runtime(expr)}}{{__left__}}{{expr}}{{__right__}}{{enddef}}
+{{def imp(module)}}{{__left__}}import {{module}}{{__right__}}{{enddef}}
+
+{{import os}}
 [
   {
     "Request": {
@@ -33,7 +60,7 @@
           "application/json"
         ]
       ],
-      "content": "{\"username\": \"%(generate_username)%\", \"password\": \"0lelplR\"}",
+      "content": "{\"username\": \"{{os.getenv('MITM_USER', 'kminchelle')}}\", \"password\": \"0lelplR\"}",
       "trailers": null,
       "timestamp_start": 1708794560.4923768,
       "timestamp_end": 1708794560.492925,
@@ -112,9 +139,17 @@
         [
           "server",
           "railway"
+        ],
+        [
+          "Custom-Header",
+          "{{imp('random')}}{{runtime('random.random()')}}"
+        ],
+        [
+          "Request-Content",
+          "{{runtime('Request[\\"content\\"]')}}"
         ]
       ],
-      "content": "{\"id\":15,\"username\":\"%(saved_username)%\",\"email\":\"%(saved_username)%@qq.com\",\"firstName\":\"Jeanne\",\"lastName\":\"Halvorson\",\"gender\":\"female\",\"image\":\"https://robohash.org/Jeanne.png?set=set4\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInVzZXJuYW1lIjoia21pbmNoZWxsZSIsImVtYWlsIjoia21pbmNoZWxsZUBxcS5jb20iLCJmaXJzdE5hbWUiOiJKZWFubmUiLCJsYXN0TmFtZSI6IkhhbHZvcnNvbiIsImdlbmRlciI6ImZlbWFsZSIsImltYWdlIjoiaHR0cHM6Ly9yb2JvaGFzaC5vcmcvSmVhbm5lLnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcwODc5NDU1MywiZXhwIjoxNzA4Nzk4MTUzfQ.XO4FtVkh3GP-eR69xdvQPNx3IrdGI_-9Vya_DJbaQQU\"}",
+      "content": "{\"id\":15,\"username\":\"{{os.getenv('MITM_USER', 'kminchelle')}}\",\"email\":\"{{os.getenv('MITM_USER', 'kminchelle')}}@qq.com\",\"firstName\":\"Jeanne\",\"lastName\":\"Halvorson\",\"gender\":\"female\",\"image\":\"https://robohash.org/Jeanne.png?set=set4\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInVzZXJuYW1lIjoia21pbmNoZWxsZSIsImVtYWlsIjoia21pbmNoZWxsZUBxcS5jb20iLCJmaXJzdE5hbWUiOiJKZWFubmUiLCJsYXN0TmFtZSI6IkhhbHZvcnNvbiIsImdlbmRlciI6ImZlbWFsZSIsImltYWdlIjoiaHR0cHM6Ly9yb2JvaGFzaC5vcmcvSmVhbm5lLnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcwODc5NDU1MywiZXhwIjoxNzA4Nzk4MTUzfQ.XO4FtVkh3GP-eR69xdvQPNx3IrdGI_-9Vya_DJbaQQU\"}",
       "trailers": null,
       "timestamp_start": 1708794560.669619,
       "timestamp_end": 1708794560.6702292,
