@@ -8,6 +8,8 @@ from mitmproxy import ctx
 from mitmproxy.http import HTTPFlow, Response, Headers
 from mitmproxy.addonmanager import Loader
 
+from dump import decode_bytes_in_state
+
 
 class MitmMock:
     def __init__(self):
@@ -36,25 +38,30 @@ class MitmMock:
             self.responses = [e['Response'] for e in self.chain if 'Response' in e]
             self.ptr = 0
 
-    def eval_preppy_value(self, value, idx: int = None):
-        request_obj = {} if idx is None else {'Request': self.requests[idx]}
+    def eval_preppy_value(self, value, ctx: dict = None):
+        ctx = ctx or {}
         if type(value) == str:
             return preppy.getModule('mm_part',
                                     sourcetext=value,
-                                    source_extension=None).getOutput(request_obj)
+                                    source_extension=None).getOutput(ctx)
         if type(value) != str and isinstance(value, Iterable):
-            return [self.eval_preppy_value(v, idx) for v in value]
+            return [self.eval_preppy_value(v, ctx) for v in value]
         return value
 
-    def eval_preppy(self, obj: dict, idx: int = None):
-        return {self.eval_preppy_value(k, idx): self.eval_preppy_value(v, idx)
+    def eval_preppy(self, obj: dict, ctx: dict = None):
+        return {self.eval_preppy_value(k, ctx): self.eval_preppy_value(v, ctx)
                 for k, v in obj.items()}
 
     def request(self, flow: HTTPFlow):
         saved_resp = self.responses[self.ptr]
         headers = Headers()
+        template_requests = {
+            'Request': decode_bytes_in_state(flow.request.get_state()),
+            'SRequest': self.requests[self.ptr]
+        }
         for k, v in saved_resp['headers']:
-            headers[self.eval_preppy_value(k, self.ptr)] = self.eval_preppy_value(v, self.ptr)
+            headers[self.eval_preppy_value(k, template_requests)] = \
+                self.eval_preppy_value(v, template_requests)
         saved_resp['headers'] = headers
 
         flow.response = Response.make(status_code=saved_resp['status_code'],

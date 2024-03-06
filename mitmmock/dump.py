@@ -61,10 +61,10 @@ class MitmMockConfigDump:
         in the load time
 
     Also, current request is exported to this environment as {{Request}}
-    dictionary.
+    dictionary and request from the mitmmock file is exported as {{SRequest}}.
 {{endif}}
 
-{{def runtime_def(*args)}}{{__left__}}{{__def__}}(*args){{__right__}}{{enddef}}
+{{def runtime_def(args)}}{{__left__}}{{__def__}}(args){{__right__}}{{enddef}}
 {{def runtime(expr)}}{{__left__}}{{expr}}{{__right__}}{{enddef}}
 {{def imp(module)}}{{__left__}}import {{module}}{{__right__}}{{enddef}}
 '''

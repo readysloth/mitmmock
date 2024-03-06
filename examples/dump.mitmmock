@@ -18,7 +18,7 @@
         in the load time
 
     Also, current request is exported to this environment as {{Request}}
-    dictionary.
+    dictionary and request from the mitmmock file is exported as {{SRequest}}.
 {{endif}}
 
 {{def runtime_def(args)}}{{__left__}}{{__def__}}({{args}}){{__right__}}{{enddef}}
@@ -154,7 +154,7 @@
       "timestamp_start": 1708794560.669619,
       "timestamp_end": 1708794560.6702292,
       "status_code": 200,
-      "reason": "OK"
+      "reason": "{{runtime('SRequest[\\"reason\\"]')}}"
     }
   },
   {
