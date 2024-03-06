@@ -70,6 +70,3 @@ class MitmMockConfigDump:
 '''
             f.write(header)
             f.write(json.dumps(self.chain, indent=2))
-
-
-addons = [MitmMockConfigDump()]

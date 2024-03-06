@@ -8,7 +8,7 @@ from mitmproxy import ctx
 from mitmproxy.http import HTTPFlow, Response, Headers
 from mitmproxy.addonmanager import Loader
 
-from dump import decode_bytes_in_state
+from .dump import decode_bytes_in_state
 
 
 class MitmMock:
@@ -70,6 +70,3 @@ class MitmMock:
         flow.is_replay = "response"
         self.ptr += 1
         self.ptr %= len(self.responses)
-
-
-addons = [MitmMock()]
